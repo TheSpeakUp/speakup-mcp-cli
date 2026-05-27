@@ -1,5 +1,5 @@
 {
-  "name": "@speakup/mcp-cli",
+  "name": "@thespeakup/mcp-cli",
   "version": "0.1.0",
   "description": "Static-token MCP transport proxy for SpeakUp — bypasses OAuth race in Claude Desktop by reading a long-lived PAT from env and speaking MCP Streamable HTTP to api.speak-up.pro.",
   "license": "MIT",

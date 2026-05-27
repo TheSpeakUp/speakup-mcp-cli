@@ -1,4 +1,4 @@
-# @speakup/mcp-cli
+# @thespeakup/mcp-cli
 
 Static-token [Model Context Protocol](https://modelcontextprotocol.io/) transport proxy for SpeakUp.
 
@@ -26,7 +26,7 @@ You don't need to install it. Claude Desktop will fetch it via `npx` on first
 run. If you'd rather pin it locally:
 
 ```bash
-npm install -g @speakup/mcp-cli
+npm install -g @thespeakup/mcp-cli
 ```
 
 Requires Node ≥18.17. Claude Desktop bundles its own Node runtime, so this is
@@ -49,7 +49,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
   "mcpServers": {
     "speakup": {
       "command": "npx",
-      "args": ["-y", "@speakup/mcp-cli@latest"],
+      "args": ["-y", "@thespeakup/mcp-cli@latest"],
       "env": {
         "SPEAKUP_MCP_TOKEN": "sk_speakup_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
       }
@@ -64,7 +64,7 @@ within ~5 seconds, with the full tool catalog listed.
 ### Claude Code
 
 ```bash
-claude mcp add speakup -- npx -y @speakup/mcp-cli@latest \
+claude mcp add speakup -- npx -y @thespeakup/mcp-cli@latest \
   -e SPEAKUP_MCP_TOKEN=sk_speakup_xxx
 ```
 

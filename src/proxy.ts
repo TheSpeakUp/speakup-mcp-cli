@@ -4,7 +4,7 @@ import type { JSONRPCMessage } from '@modelcontextprotocol/sdk/types.js';
 import type { ProxyConfig } from './config.js';
 import { logger, maskToken, shortMask } from './log.js';
 
-export const USER_AGENT = '@speakup/mcp-cli/0.1.0';
+export const USER_AGENT = '@thespeakup/mcp-cli/0.1.0';
 
 export type ExitCode = 0 | 1;
 
