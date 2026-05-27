@@ -1,4 +1,5 @@
-const TOKEN_RE = /sk_speakup_[A-Za-z0-9]+/g;
+// Token body charset matches backend `secrets.token_urlsafe()` output: base64url.
+const TOKEN_RE = /sk_speakup_[A-Za-z0-9_-]+/g;
 
 export function maskToken(input: string): string {
   return input.replace(TOKEN_RE, (m) => {

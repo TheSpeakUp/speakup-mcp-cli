@@ -7,7 +7,9 @@ export interface ProxyConfig {
 
 export const DEFAULT_URL = 'https://api.speak-up.pro/v2/mcp/transport/';
 
-const TOKEN_PATTERN = /^sk_speakup_[A-Za-z0-9]{43}$/;
+// Backend (`speak_up_backend` PR #879): plaintext = "sk_speakup_" + secrets.token_urlsafe(24)
+// → 11-char fixed prefix + 32-char base64url body = 43 chars total.
+const TOKEN_PATTERN = /^sk_speakup_[A-Za-z0-9_-]{32}$/;
 
 export class ConfigError extends Error {
   constructor(message: string) {
@@ -25,7 +27,7 @@ export function loadConfig(env: NodeJS.ProcessEnv): ProxyConfig {
   }
   if (!TOKEN_PATTERN.test(token)) {
     throw new ConfigError(
-      'SPEAKUP_MCP_TOKEN is malformed. Expected format: sk_speakup_<43 base62 chars>. Regenerate the token via the SpeakUp web UI.',
+      'SPEAKUP_MCP_TOKEN is malformed. Expected format: sk_speakup_<32 base64url chars>. Regenerate the token via the SpeakUp web UI.',
     );
   }
 

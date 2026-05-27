@@ -51,7 +51,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json`
       "command": "npx",
       "args": ["-y", "@speakup/mcp-cli@latest"],
       "env": {
-        "SPEAKUP_MCP_TOKEN": "sk_speakup_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        "SPEAKUP_MCP_TOKEN": "sk_speakup_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
       }
     }
   }

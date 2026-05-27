@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { ConfigError, DEFAULT_URL, loadConfig } from '../src/config.js';
 
-const VALID_TOKEN = 'sk_speakup_' + 'a'.repeat(43);
+// Matches backend format: sk_speakup_ + 32-char base64url body (= secrets.token_urlsafe(24)).
+const VALID_TOKEN = 'sk_speakup_' + 'a'.repeat(32);
+const VALID_TOKEN_WITH_URLSAFE = 'sk_speakup_' + 'a'.repeat(28) + 'a-b_';
 
 describe('loadConfig', () => {
   it('returns config with default URL when only token set', () => {
@@ -48,11 +50,20 @@ describe('loadConfig', () => {
     );
   });
 
+  it('accepts base64url chars (_ and -) in token body', () => {
+    const cfg = loadConfig({
+      SPEAKUP_MCP_TOKEN: VALID_TOKEN_WITH_URLSAFE,
+    } as NodeJS.ProcessEnv);
+    expect(cfg.token).toBe(VALID_TOKEN_WITH_URLSAFE);
+  });
+
   it.each([
-    ['wrong prefix', 'pk_speakup_' + 'a'.repeat(43)],
-    ['too short', 'sk_speakup_' + 'a'.repeat(40)],
-    ['too long', 'sk_speakup_' + 'a'.repeat(50)],
-    ['invalid char', 'sk_speakup_' + 'a'.repeat(42) + '!'],
+    ['wrong prefix', 'pk_speakup_' + 'a'.repeat(32)],
+    ['too short', 'sk_speakup_' + 'a'.repeat(31)],
+    ['too long', 'sk_speakup_' + 'a'.repeat(33)],
+    ['invalid char +', 'sk_speakup_' + 'a'.repeat(31) + '+'],
+    ['invalid char /', 'sk_speakup_' + 'a'.repeat(31) + '/'],
+    ['invalid char !', 'sk_speakup_' + 'a'.repeat(31) + '!'],
     ['empty body', 'sk_speakup_'],
   ])('throws on malformed token (%s)', (_label, token) => {
     expect(() => loadConfig({ SPEAKUP_MCP_TOKEN: token } as NodeJS.ProcessEnv)).toThrow(

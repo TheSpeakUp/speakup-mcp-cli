@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { maskToken, shortMask } from '../src/log.js';
 
-const TOKEN = 'sk_speakup_' + 'a'.repeat(39) + 'wxyz';
+// Matches backend format: 11-char prefix + 32-char base64url body.
+const TOKEN = 'sk_speakup_' + 'a'.repeat(28) + 'wxyz';
+const TOKEN_WITH_URLSAFE = 'sk_speakup_' + 'a'.repeat(27) + '-_xyz';
 
 describe('maskToken', () => {
   it('masks a token surrounded by other text', () => {
@@ -27,6 +29,13 @@ describe('maskToken', () => {
 
   it('handles empty input', () => {
     expect(maskToken('')).toBe('');
+  });
+
+  it('masks tokens containing base64url chars (_ and -) without leaking the tail', () => {
+    const out = maskToken(`Bearer ${TOKEN_WITH_URLSAFE} done`);
+    expect(out).toBe('Bearer sk_speakup_***_xyz done');
+    expect(out).not.toContain(TOKEN_WITH_URLSAFE);
+    expect(out).not.toContain('aaaa-_');
   });
 });
 
