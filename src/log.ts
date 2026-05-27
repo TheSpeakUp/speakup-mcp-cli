@@ -1,11 +1,12 @@
-// Token body charset matches backend `secrets.token_urlsafe()` output: base64url.
-const TOKEN_RE = /sk_speakup_[A-Za-z0-9_-]+/g;
+// Token = `sk_speakup_` (11 chars) + base64url body of exactly 32 chars
+// (backend `secrets.token_urlsafe(24)`). Body bound is fixed at {32} so the
+// match cannot greedily swallow trailing `_-`-containing text after the
+// token — otherwise the `last-4` tail in `maskToken` would no longer be the
+// real last-4 of the token.
+const TOKEN_RE = /sk_speakup_[A-Za-z0-9_-]{32}/g;
 
 export function maskToken(input: string): string {
-  return input.replace(TOKEN_RE, (m) => {
-    const tail = m.length >= 4 ? m.slice(-4) : '****';
-    return `sk_speakup_***${tail}`;
-  });
+  return input.replace(TOKEN_RE, (m) => `sk_speakup_***${m.slice(-4)}`);
 }
 
 export function shortMask(token: string): string {

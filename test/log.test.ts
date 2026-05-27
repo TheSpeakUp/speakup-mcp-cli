@@ -37,6 +37,22 @@ describe('maskToken', () => {
     expect(out).not.toContain(TOKEN_WITH_URLSAFE);
     expect(out).not.toContain('aaaa-_');
   });
+
+  it('does not absorb trailing _- text after a complete token', () => {
+    // Boundary attack: text following the 32-char body starts with `-` or `_`
+    // (no whitespace). Mask must stop at body length and preserve real last-4.
+    const trailingDash = maskToken(`${TOKEN}-retry-after-300`);
+    expect(trailingDash).toBe('sk_speakup_***wxyz-retry-after-300');
+
+    const trailingUnderscore = maskToken(`${TOKEN}_suffix`);
+    expect(trailingUnderscore).toBe('sk_speakup_***wxyz_suffix');
+  });
+
+  it('refuses to match short prefix-only strings as tokens', () => {
+    // Without the {32} bound, "sk_speakup_a" would match. With it, it stays plain.
+    expect(maskToken('sk_speakup_a')).toBe('sk_speakup_a');
+    expect(maskToken('sk_speakup_short')).toBe('sk_speakup_short');
+  });
 });
 
 describe('shortMask', () => {
