@@ -1,0 +1,60 @@
+{
+  "name": "@speakup/mcp-cli",
+  "version": "0.1.0",
+  "description": "Static-token MCP transport proxy for SpeakUp — bypasses OAuth race in Claude Desktop by reading a long-lived PAT from env and speaking MCP Streamable HTTP to api.speak-up.pro.",
+  "license": "MIT",
+  "author": "SpeakUp",
+  "homepage": "https://github.com/TheSpeakUp/speakup-mcp-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheSpeakUp/speakup-mcp-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TheSpeakUp/speakup-mcp-cli/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "speakup",
+    "claude-desktop",
+    "anthropic"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "bin": {
+    "mcp-cli": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc && chmod +x dist/index.js",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "npm run typecheck && npm run format:check",
+    "prepublishOnly": "npm run lint && npm run build && npm test",
+    "clean": "rm -rf dist coverage"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "prettier": "^3.3.0",
+    "tsx": "^4.16.0",
+    "typescript": "^5.5.0",
+    "vitest": "^3.2.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
