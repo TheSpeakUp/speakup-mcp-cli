@@ -19,7 +19,19 @@ permissions:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    # Self-hosted (2026-08-12): the org's Actions billing is blocked, so GitHub-
+    # hosted jobs never start — they die 2-3s in with zero executed steps and the
+    # annotation "The job was not started because recent account payments have
+    # failed or your spending limit needs to be increased". Read that with
+    #   gh api repos/TheSpeakUp/speakup-mcp-cli/check-runs/<job_id>/annotations --jq '.[].message'
+    # before debugging a diff — the failure looks exactly like a code regression.
+    #
+    # `gha-gate` is the org `linux-ci-shared` runner pool. This repo had NO
+    # self-hosted capacity of any kind until 2026-08-12, when it was added to that
+    # pool's scope — a `runs-on` edit alone would not have worked before then.
+    #
+    # REVERT to `ubuntu-latest` once billing is restored.
+    runs-on: [self-hosted, gha-gate, X64]
     environment: npm-publish
     steps:
       - uses: actions/checkout@v4
